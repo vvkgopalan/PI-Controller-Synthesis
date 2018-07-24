@@ -7,16 +7,51 @@ The goal of this research is to combine two seperate research directions taken b
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-Gaining access to the mercurial repositories:
-
-
 ### Prerequisites
 
-What things you need to install the software and how to install them
+What things you need to install the software and how to install them:
 
+Install [BoSy](https://github.com/reactive-systems/bosy) and follow the instructions given in its Readme. 
+To play around with BoSy, there's a helpful tool: https://www.react.uni-saarland.de/tools/online/BoSy/
+For more information, see this paper: https://www.react.uni-saarland.de/publications/cav2017-bosy.pdf
+Bosy is a tool required for synthesis. However, once it's installed, there is a wrapper shell script that needs to be placed in BoSy/* in order for later tslsynthesis tools to work. 
 ```
-Give examples
+wrapper.sh:
+
+#!/bin/bash
+pushd .
+cd ~/BoSy
+~/BoSy/.build/release/BoSy --synthesize --target aiger $1
 ```
+
+#### Gain access to the mercurial repositories:
+
+In order to access all the synthesis tools, you must first get access to the repository server: https://version.react.uni-saarland.de/_admin/register. 
+```
+The following repositories are necessary:
+  aigerlib
+  tsltools
+  finitelib
+  tslbenchmarks
+```
+
+#### P4 Development & Utilizing P4Runtime/PI
+
+The P4 Runtime API is a silicon-independent and protocol-independent API. In order to develop with it, you need mininet, grpc, and multitudes of dependencies. If you are running a native Linux build, the dependencies can be installed by hand using two shell scripts found in [tutorials](https://github.com/p4lang/tutorials/). Otherwise, you'll still need to use [tutorials](https://github.com/p4lang/tutorials/) to install a VM. 
+
+To build the virtual machine:
+- Install [Vagrant](https://vagrantup.com) and [VirtualBox](https://virtualbox.org)
+- `cd vm`
+- `vagrant up`
+- Log in with username `p4` and password `p4` and issue the command `sudo shutdown -r now`
+- When the machine reboots, you should have a graphical desktop machine with the required
+software pre-installed.
+
+To install dependencies by hand, please reference the [vm](../vm) installation scripts.
+They contain the dependencies, versions, and installation procedure.
+You can run them directly on an Ubuntu 16.04 machine:
+- `sudo ./root-bootstrap.sh`
+- `sudo ./user-bootstrap.sh`
 
 ### Installing
 
@@ -40,49 +75,19 @@ End with an example of getting some data out of the system or using it for a lit
 
 Explain how to run the automated tests for this system
 
-### Break down into end to end tests
+### Breaking down test cases
 
 Explain what these tests test and why
 
 ```
 Give an example
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
