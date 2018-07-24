@@ -1,6 +1,7 @@
 # P4Runtime API Controller Synthesis Using FRP
 
-For a description of the proposed research, see: [Research Proposal](https://docs.google.com/document/d/13UhfMzuLgHZB24gnmlTV_pRGYQKHTlvJs-0mtDDsrgI/edit?usp=sharing)
+For a description of the proposed research, see: [Research Proposal](https://docs.google.com/document/d/13UhfMzuLgHZB24gnmlTV_pRGYQKHTlvJs-0mtDDsrgI/edit?usp=sharing).
+
 The goal of this research is to combine two seperate research directions taken by members of Ruzica Piskac's research group. The first involves the [synthesis of functional reactive programs](https://arxiv.org/abs/1712.00246) and the second utilizes automated repair by example applied to [firewalls](http://www.cs.yale.edu/homes/zhai-ennan/firemason.pdf).
 
 ## Getting Started
@@ -55,42 +56,34 @@ You can run them directly on an Ubuntu 16.04 machine:
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
+Once you have the local dependencies or the vm installed, clone the following repository: https://github.com/vvkgopalan/7-15-2018
+This repository has two controllers that utilize the P4Runtime API. Under testing, there are two example controllers. 
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+1. In your shell, run:
+   ```bash
+   make
+   ```
+   This will:
+   * compile `p4program.p4`,
+   * start a Mininet instance with n switches based on `topology.json`
 
-### Breaking down test cases
+2. You should now see a Mininet command prompt. Start a ping between h1 and h2:
+   ```bash
+   mininet> h1 ping h2
+   ```
+   Based on the controller, there will be different interactions. 
+   
+3. Open another shell and run the starter code:
+   ```bash
+   ./main.py
+   ```
+   This will install the `p4program.p4` program on the switches and push the
+   forwarding rules.
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+4. Press `Ctrl-C` to the second shell to stop `main.py`
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Mark Santolucito, Bill Hallahan, Ruzica Piskac for all the help and guidance. There is a lot of work still to do on this project as synthesis still has yet to be completed. 
