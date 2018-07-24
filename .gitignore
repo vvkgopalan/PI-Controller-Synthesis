@@ -1,3 +1,11 @@
+#folders from ROSE Group Gitlab & Felix's mercurial repositories
+aigerlib
+finitelib
+papers
+tslbenchmarks
+tsltools
+tutorials
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
