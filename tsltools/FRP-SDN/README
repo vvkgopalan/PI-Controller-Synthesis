@@ -1,0 +1,7 @@
+To install tslsynth...
+
+
+
+clone tsltools
+clone tslbenchmarks
+install bosy with 'make all' -might require install syfco seperatly?

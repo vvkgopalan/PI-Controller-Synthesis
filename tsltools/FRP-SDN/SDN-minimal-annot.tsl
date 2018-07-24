@@ -1,0 +1,68 @@
+// This specification describes a very simply network, where a switch, s,
+// is routing packets to two destinations: r1 and r2. 
+// Which destination to rout the packet to is described by a P4 header field called dest.
+
+// addForwarding(x, y) and removeForwarding(x, y) are uninterpeted functions.
+// In the implementation, addForwarding(x, y) should add a rule to the switch x
+// that forwards packets to y, while removeForwarding should remove such a rule.
+// forwardsTo(x, y) is a predicate, which describes whether x forwards packets to y.
+
+// haspacket(x) is a predicate which indicates if the switch x is processing a packet
+// at any given time.
+
+// dest is a predicate on a field in a packet header.
+// If dest(s, y) is true, the packet at switch x has dest set to y
+
+initially assume {
+  !forwardsTo(s,noder1());
+  !forwardsTo(s,noder2());
+}
+
+always assume {
+  
+  // addForwarding Formulas
+  // If we add a rule forwarding packets from s to noder1() (resp. s to noder2()) then:
+  //    - In the next time step, forwardsTo(s, noder1()) is true
+  //    - forwardsTo(s, noder2()) is true until that forwarding rule is removed
+  [ s <- addForwarding(s,noder1()) ] -> X (forwardsTo(s,noder1()) W [ s <- removeForwarding(s,noder1()) ]);
+  [ s <- addForwarding(s,noder2()) ] -> X (forwardsTo(s,noder2()) W [ s <- removeForwarding(s,noder2()) ]);
+
+  //removeForwarding Formulas
+  // If we remove a rule forwarding packets from s to noder1() (resp. s to noder2()) then:
+  //    - In the next time step, forwardsTo(s, noder1()) is false
+  //    - forwardsTo(s, noder2()) is false until a forwarding rule is added
+  [ s <- removeForwarding(s,noder1()) ] -> X (!forwardsTo(s,noder1())) W [ s <- addForwarding(s,noder1()) ];
+  [ s <- removeForwarding(s,noder2()) ] -> X (!forwardsTo(s,noder2())) W [ s <- addForwarding(s,noder2()) ];
+
+  // The addForwarding and removeForwarding formulas exactly describe how addForwarding, removeForwarding, and
+  // forwardsTo interact.  It might be helpful to think about why we need all of them-
+  // for example, what do the removeForwarding Formulas tell us that the addForwarding formulas do not?
+
+  // All of the below are maybe slightly wrong?
+  // The first assumes s has rules to forward packets to r1 or r2- this actually might be ok for this network?
+  // The second and third assume ALL packets at s should be sent to r1 and r2 if there is any forwarding rule
+  // But in fact, we want packets to be forwarded only if they have the appropriate dest
+  //haspacket(s) -> F (haspacket(r1) || haspacket(r2));
+  //haspacket(s) && forwardsTo(s, noder1()) -> F haspacket(r1);
+  //haspacket(s) && forwardsTo(s, noder2()) -> F haspacket(r2);
+
+  // What can we say about how packets move through the network, in terms of haspacket?
+  // Worth thinking about- I'm not exactly sure.
+
+  // These are very specific assumptions to this specification, that describe
+  // how dest shapes the path of a packet
+  forwardsTo(s,noder1()) && haspacket(s) && dest(s,noder1()) -> F haspacket(r1);
+  forwardsTo(s,noder2()) && haspacket(s) && dest(s,noder2()) -> F haspacket(r2);
+
+
+}
+
+// This is what we want to make sure holds on the network-
+// If there is a packet with a destination of r1 or r2, that packet will evenetually be correctly routed
+always guarantee {
+
+  dest(s,noder1()) -> F haspacket(r1);
+  dest(s,noder2()) -> F haspacket(r2);
+
+
+}

@@ -1,0 +1,27 @@
+\section{Ideas}
+
+Using the insight from McNettle that FRP and SDN controllers are connected, and the insight from~\cite{FRPSynth} that we can synthesize FRP programs from temporal logic formulas, we propose to synthesize SDN programs.
+Specifically, we will synthesize both the \textit{control plane} and the \textit{data plane} at the same time.
+The high level goal is that while the separation of the control plane and the data plane is useful for building efficient SDNs, it requires the programmer to introduce an artificial divide in the semantics of their system.
+That is, a network programmer would like to be able to guarantee properties on the way the entire network functions, not just properties that are isolated to either the control or data planes.
+
+The issue of complex interactions between the control plane and data plane is an emerging phenomena, with increasing powerful hardware that is being programming increasing expressive languages.
+In particular, we take P4 as our main motivation for this work - in P4 it is possible to express complex behavior that can interact with the control plane in unexpected ways.
+\markk{provide a simple example of this}
+
+
+In order to synthesis an FRP program (or more generally, formally describe a reactive system), the first requirement is to define the inputs and outputs to the system.
+For this, we take inspiration from NetKat's conceptual treatment of an SDN as only ever processing a single packet at a time.
+To formalize this idea presented in NetKat, our model of an SDN has as input a single packet at each time step, and as output a sinlge packet at each time step.
+Additionally, we specify on which node/port the packet is arriving, and towards which node/port the packet has been sent.
+
+As an example, given the network topology shown in Fig~\ref{fig:mininet}, we would have the input/output shown in Fig~\ref{fig:mininetIO}.
+
+We can specify the property that ... with the following TSL formula:
+
+\begin{align*}
+& \name{ALWAYS} \; \Big(\name{leaveApp}(\name{Sys}) \; \wedge \; \name{musicPlaying}(\name{MP}) \\[-0.5em]
+& \quad \hspace{3.5em} \implies \upd{\name{MP}}{\name{pause}(\name{MP})} \Big) \\[0.8em]
+& \name{ALWAYS} \; \Big(\name{resumeApp}(\name{Sys})  \\[-0.5em]
+& \quad \hspace{3.5em} \implies  \upd{\name{MP}}{\name{play}(\name{Tr},\name{trackPos}(\name{MP}))} \Big)
+\end{align*}

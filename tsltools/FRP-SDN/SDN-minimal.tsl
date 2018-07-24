@@ -1,0 +1,20 @@
+
+initially assume {
+  !(haspacket(r1) || haspacket(r2));
+  !(forwardsTo(s, noder1()) || forwardsTo(s, noder2()));
+}
+
+always assume {
+  [s <- addFwd(s, noder1())] -> X forwardsTo(s, noder1()) W [s <- rmFwd(s, noder1())];
+  [s <- addFwd(s, noder2())] -> X forwardsTo(s, noder2()) W [s <- rmFwd(s, noder2())];
+  [s <- rmFwd(s, noder1())] -> !forwardsTo(s, noder1()) W [s <- addFwd(s, noder1())];
+  [s <- rmFwd(s, noder2())] -> !forwardsTo(s, noder2()) W [s <- addFwd(s, noder2())];
+}
+
+always guarantee {
+  //forwardsTo(s, noder1()) && haspacket(s) && dest(s, noder1()) -> F haspacket(r1);
+  //forwardsTo(s, noder2()) && haspacket(s) && dest(s, noder2()) -> F haspacket(r2);
+
+  dest(s,noder1()) -> F haspacket(r1);
+  dest(s,noder2()) -> F haspacket(r2);
+}

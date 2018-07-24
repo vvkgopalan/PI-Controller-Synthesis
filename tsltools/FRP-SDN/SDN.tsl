@@ -1,0 +1,13 @@
+
+always assume {
+  [ S1 <- addForwarding(S1,X) ] -> forwardsTo(S1,X) W removeForwarding(S1,X);
+
+  G haspacket(S1) -> F (haspacket(B) || haspacket(X) || [ S1 <- drop() ] );
+
+
+}
+always guarantee {
+  haspacket(S2i) -> F ( (forwardsTo(S1,X) && ! forwardsTo(S1,B)) 
+                             W ! haspacket(S2i) );
+
+}

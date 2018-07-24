@@ -1,0 +1,57 @@
+//this controller controls a setup in which there are 3 switches and 4 hosts
+//
+//									S2
+//								/	|	\
+//						 ___ S1		|	S3 ___
+//						/\		\_	C  _/	 /\
+//					   /  \					/  \
+//					  H1  H2			   H3  H4 	
+//
+// this is a dumb version of controlling
+// have a function validFwd(d1, d2) and add forwarding rule between the switches if its a valid fwd
+
+initially assume {
+  !(haspacket(H1) || haspacket(H2) || haspacket(H3) || haspacket(H4));
+  !(forwardsTo(S1, nodeH1()) || forwardsTo(S1, nodeH2()));
+  !(forwardsTo(S3, nodeH3()) || forwardsTo(S3, nodeH4()));
+  !(forwardsTo(S2, S1) || forwardsTo(S2, S3));
+}
+
+always assume {
+	//!(forwardsTo(S2, nodeH1()) || forwardsTo(S2, nodeH2()));
+	//!(forwardsTo(S2, nodeH3()) || forwardsTo(S1, nodeH4()));
+	//!(forwardsTo(S1, nodeH3()) || forwardsTo(S1, nodeH4()));
+	//!(forwardsTo(S3, nodeH1()) || forwardsTo(S3, nodeH2()));
+	//above forwarding impossible directly
+
+	[origin <- addFwd(origin, destination())] -> X forwardsTo(origin, destination()) W [origin <- rmFwd(origin, destination())];
+  	[origin <- addFwd(origin, destination())] -> X forwardsTo(origin, destination()) W [origin <- rmFwd(origin, destination())];
+  	[origin <- rmFwd(origin, destination())] -> !forwardsTo(origin, destination()) W [origin <- addFwd(origin, destination())];
+  	[origin <- rmFwd(origin, destination())] -> !forwardsTo(origin, destination()) W [origin <- addFwd(origin, destination())];
+
+
+	//[S1 <- addFwd(S1, nodeH1())] -> X forwardsTo(S1, nodeH1()) W [S1 <- rmFwd(S1, nodeH1())];
+  	//[S1 <- addFwd(S1, nodeH2())] -> X forwardsTo(S1, nodeH2()) W [S1 <- rmFwd(S1, nodeH2())];
+  	//[S1 <- rmFwd(S1, nodeH1())] -> !forwardsTo(S1, nodeH1()) W [S1 <- addFwd(S1, nodeH1())];
+  	//[S1 <- rmFwd(S1, nodeH2())] -> !forwardsTo(S1, nodeH2()) W [S1 <- addFwd(S1, nodeH2())];
+
+  	//[S2 <- addFwd(S2, S1)] -> X forwardsTo(S2, S1) W [S2 <- rmFwd(S2, S1)];
+  	//[S2 <- addFwd(S2, S3)] -> X forwardsTo(S2, S3) W [S2 <- rmFwd(S2, S3)];
+  	//[S2 <- rmFwd(S2, S1)] -> !forwardsTo(S2, S1) W [S2 <- addFwd(S2, S1)];
+  	//[S2 <- rmFwd(S2, S3)] -> !forwardsTo(S2, S3) W [S2 <- addFwd(S2, S3)];
+
+  	//[S3 <- addFwd(S3, nodeH3())] -> X forwardsTo(S3, nodeH3()) W [S1 <- rmFwd(S3, nodeH3())];
+  	//[S3 <- addFwd(S3, nodeH4())] -> X forwardsTo(S3, nodeH4()) W [S1 <- rmFwd(S3, nodeH4())];
+  	//[S3 <- rmFwd(S3, nodeH3())] -> !forwardsTo(S3, nodeH3()) W [S1 <- addFwd(S3, nodeH3())];
+  	//[S3 <- rmFwd(S3, nodeH4())] -> !forwardsTo(S3, nodeH4()) W [S1 <- addFwd(S3, nodeH4())];
+}
+
+always guarantee {
+  //forwardsTo(s, noder1()) && haspacket(s) && dest(s, noder1()) -> F haspacket(r1);
+  //forwardsTo(s, noder2()) && haspacket(s) && dest(s, noder2()) -> F haspacket(r2);
+
+  dest(nodeH1()) -> F haspacket(H1);
+  dest(nodeH2()) -> F haspacket(H2);
+  dest(nodeH3()) -> F haspacket(H3);
+  dest(nodeH4()) -> F haspacket(H4);
+}

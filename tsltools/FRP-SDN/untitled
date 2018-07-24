@@ -1,0 +1,66 @@
+
+initially assume {
+  !forwardsTo(s,noder1());
+  !forwardsTo(s,noder2());
+}
+
+always assume {
+  
+  [ s <- addForwarding(s,noder1()) ] -> X (forwardsTo(s,noder1()) W [ s <- removeForwarding(s,noder1()) ]);
+  [ s <- addForwarding(s,noder2()) ] -> X (forwardsTo(s,noder2()) W [ s <- removeForwarding(s,noder2()) ]);
+
+  [ s <- removeForwarding(s,noder1()) ] -> X (!forwardsTo(s,noder1())) W [ s <- addForwarding(s,noder1()) ];
+  [ s <- removeForwarding(s,noder2()) ] -> X (!forwardsTo(s,noder2())) W [ s <- addForwarding(s,noder2()) ];
+
+  haspacket(s) -> F (haspacket(r1) || haspacket(r2));
+
+  forwardsTo(s,noder1()) && haspacket(s) && dest(s,noder1()) -> F haspacket(r1);
+  forwardsTo(s,noder2()) && haspacket(s) && dest(s,noder2()) -> F haspacket(r2);
+
+
+}
+
+always guarantee {
+
+  dest(s,noder1()) -> F haspacket(r1);
+  dest(s,noder2()) -> F haspacket(r2);
+
+}
+------------------------
+
+
+//want to just use forwarding rules
+initially assume {
+  !forwardsTo(s,noder1());
+  !forwardsTo(s,noder2());
+  !haspacket(r1);
+  !haspacket(r2);
+  //!hasForwarding(s);
+
+}
+
+
+
+always guarantee{
+
+  [ s <- removeForwarding(s,noder1()) ] -> X (!forwardsTo(s,noder1())) W [ s <- addForwarding(s,noder1()) ];
+  [ s <- removeForwarding(s,noder2()) ] -> X (!forwardsTo(s,noder2())) W [ s <- addForwarding(s,noder2()) ];
+  
+
+}
+
+guarantee after 1{
+
+  [ s <- addForwarding(s,noder1()) ] -> X (forwardsTo(s,noder1()) W [ s <- removeForwarding(s,noder1()) ]);
+  [ s <- addForwarding(s,noder2()) ] -> X (forwardsTo(s,noder2()) W [ s <- removeForwarding(s,noder2()) ]);
+
+}
+
+always assume{
+  
+  dest(s,noder1()) -> F haspacket(r1);
+  dest(s,noder2()) -> F haspacket(r2);
+
+  //forwardsTo(s,noder1()) && haspacket(s) && dest(s,noder1()) -> F haspacket(r1);
+  //forwardsTo(s,noder2()) && haspacket(s) && dest(s,noder2()) -> F haspacket(r2);
+}

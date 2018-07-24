@@ -1,0 +1,38 @@
+\usepackage{amsmath}
+\usepackage[hyphens]{url}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+
+\usepackage{ltl}
+\usepackage{tikz}
+\usetikzlibrary{fit,arrows,calc,positioning}
+
+
+\lstset{
+  language=C,
+  basicstyle=\footnotesize\ttfamily,
+  breaklines=true
+  %caption=\relax
+}
+
+\long\def\ennan#1{{\color{blue}{\bf Ennan: }{\small [#1]}}}
+\long\def\markk#1{{\color{green}{\bf Mark: }{\small [#1]}}}
+\long\def\bill#1{{\color{purple}{\bf Bill: }{\small [#1]}}}
+\long\def\ruzica#1{{\color{red}{\bf Ruzica: }{\small [#1]}}}
+\long\def\code#1{{\tt \footnotesize #1}}
+
+% system related terms
+\newcommand{\app}{OurTool\xspace}
+
+\renewcommand{\implies}{\ensuremath{\Rightarrow}}
+
+%TSL
+\newcommand{\upd}[2]{\ensuremath{[\,#1 \lhd \, #2\,]}}
+
+\newcommand{\name}[1]{{\text{\texttt{#1}}}}
+\newcommand{\names}{\ensuremath{\mathcal{N}}}
+\newcommand{\inames}{\ensuremath{\names_{\!I}}}
+\newcommand{\onames}{\ensuremath{\names_{\!O}}\xspace}
+\newcommand{\pnames}{\ensuremath{\names_{\!P}}}
+\newcommand{\fnames}{\ensuremath{\names_{\!F}}}
