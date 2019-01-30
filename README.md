@@ -87,3 +87,4 @@ This repository has two controllers that utilize the P4Runtime API. Under testin
 ## Acknowledgments
 
 * Mark Santolucito, Bill Hallahan, Ruzica Piskac for all the help and guidance. There is a lot of work still to do on this project as synthesis still has yet to be completed. 
+* A summary of the summer's work can be found [here]. (https://docs.google.com/document/d/1PATTYmEoPL06X4Y1BA2ra9zLtxsPLkJ9g4fwv1ae0n0/edit?usp=sharing)
